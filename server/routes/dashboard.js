@@ -20,7 +20,7 @@ router.get("/stats", authorization, async (req, res) => {
 
     // Today's imports (finalized only)
     const todayImports = await pool.query(`
-      SELECT COALESCE(SUM(total_amount + COALESCE(price, 0)), 0) as total
+      SELECT COALESCE(SUM(total_amount), 0) as total
       FROM import_invoices 
       WHERE status = 'finalized' 
       AND created_at >= $1 AND created_at <= $2
