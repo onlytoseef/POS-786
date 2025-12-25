@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import api, { cachedGet } from '../services/api';
+import { useState, useEffect } from 'react';
+import { cachedGet } from '../services/api';
 import useCurrencyConverter from '../hooks/useCurrencyConverter';
 import { FaChartLine, FaFileImport, FaBoxes, FaHandHoldingUsd, FaMoneyCheckAlt, FaWallet, FaFilePdf } from 'react-icons/fa';
 import toast from 'react-hot-toast';

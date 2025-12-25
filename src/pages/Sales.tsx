@@ -12,6 +12,7 @@ import { InvoiceSkeleton } from '../components/ui/Skeleton';
 
 interface SalesInvoice {
     id: number;
+    invoice_no?: string;
     customer_id: number;
     customer_name: string;
     type: string;
@@ -716,9 +717,12 @@ const Sales = () => {
                     <div className="print-container flex justify-center p-4 bg-gray-200 min-h-screen">
                         <PrintInvoice
                             ref={printRef}
-                            invoice={selectedInvoice}
+                            invoice={{
+                                ...selectedInvoice,
+                                invoice_no: selectedInvoice.invoice_no || `INV-${selectedInvoice.id.toString().padStart(5, '0')}`
+                            }}
                             items={invoiceItems}
-                            invoiceType="sale"
+                            invoiceType="sales"
                         />
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../services/api';
 import Button from '../components/ui/Button';
 import DatePicker from '../components/ui/DatePicker';
@@ -6,12 +6,6 @@ import SelectInput from '../components/ui/SelectInput';
 import DataTable from '../components/ui/DataTable';
 import useCurrencyConverter from '../hooks/useCurrencyConverter';
 import toast from 'react-hot-toast';
-
-interface DailyReportData {
-    sales: any[];
-    imports: any[];
-    payments: any[];
-}
 
 interface Supplier {
     id: number;
