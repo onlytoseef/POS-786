@@ -43,11 +43,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
 
     return (
         <div className="w-56 sm:w-64 h-screen flex flex-col shadow-xl" style={{ backgroundColor: '#242A2A' }}>
-            <div className="p-4 sm:p-6 border-b flex justify-center items-center" style={{ borderColor: '#3A4242' }}>
-                            <img src={logo} alt="Logo" className="w-40 h-40 sm:w-52 sm:h-52 object-contain" />
+            <div className="p-3 sm:p-4 md:p-5 border-b flex justify-center items-center relative" style={{ borderColor: '#3A4242' }}>
+                <img src={logo} alt="Logo" className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 object-contain" />
                 <button 
                     onClick={onClose}
-                    className="lg:hidden p-1 rounded hover:bg-white/10 transition-colors absolute right-3"
+                    className="lg:hidden p-1 rounded hover:bg-white/10 transition-colors absolute right-3 top-3"
                     style={{ color: '#EBE0C0' }}
                 >
                     <FaTimes />
