@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { cachedGet } from '../services/api';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
@@ -29,8 +29,8 @@ const Customers = () => {
 
     const fetchCustomers = async () => {
         try {
-            const res = await api.get('/customers');
-            setCustomers(res.data);
+            const data = await cachedGet<Customer[]>('/customers');
+            setCustomers(data);
         } catch (err: any) {
             toast.error('Failed to load customers. Please refresh the page.');
             console.error(err);

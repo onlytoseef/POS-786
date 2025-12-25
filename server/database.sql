@@ -103,3 +103,48 @@ CREATE TABLE stock_movements (
     reference_id INTEGER, -- invoice id
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ============================================
+-- PERFORMANCE INDEXES
+-- ============================================
+
+-- Invoice Status & Date Indexes (for filtering and reports)
+CREATE INDEX idx_import_invoices_status ON import_invoices(status);
+CREATE INDEX idx_sales_invoices_status ON sales_invoices(status);
+CREATE INDEX idx_import_invoices_created_at ON import_invoices(created_at);
+CREATE INDEX idx_sales_invoices_created_at ON sales_invoices(created_at);
+CREATE INDEX idx_import_invoices_status_created ON import_invoices(status, created_at);
+CREATE INDEX idx_sales_invoices_status_created ON sales_invoices(status, created_at);
+CREATE INDEX idx_sales_invoices_type_status ON sales_invoices(type, status);
+
+-- Foreign Key Indexes (for JOINs)
+CREATE INDEX idx_import_invoices_supplier_id ON import_invoices(supplier_id);
+CREATE INDEX idx_sales_invoices_customer_id ON sales_invoices(customer_id);
+CREATE INDEX idx_import_items_invoice ON import_items(import_invoice_id);
+CREATE INDEX idx_sales_items_invoice ON sales_items(invoice_id);
+CREATE INDEX idx_import_items_product ON import_items(product_id);
+CREATE INDEX idx_sales_items_product ON sales_items(product_id);
+
+-- Payments Indexes
+CREATE INDEX idx_payments_type ON payments(type);
+CREATE INDEX idx_payments_partner ON payments(type, partner_id);
+CREATE INDEX idx_payments_created_at ON payments(created_at);
+
+-- Stock Movements Indexes
+CREATE INDEX idx_stock_movements_product ON stock_movements(product_id);
+CREATE INDEX idx_stock_movements_ref ON stock_movements(reference_type, reference_id);
+CREATE INDEX idx_stock_movements_date ON stock_movements(date);
+
+-- Products Indexes
+CREATE INDEX idx_products_category ON products(category);
+CREATE INDEX idx_products_current_stock ON products(current_stock) WHERE current_stock > 0;
+CREATE INDEX idx_products_name ON products(name);
+
+-- Ledger Balance Partial Indexes (for receivables/payables reports)
+CREATE INDEX idx_customers_balance ON customers(ledger_balance) WHERE ledger_balance > 0;
+CREATE INDEX idx_suppliers_balance ON suppliers(ledger_balance) WHERE ledger_balance > 0;
+CREATE INDEX idx_customers_name ON customers(name);
+CREATE INDEX idx_suppliers_name ON suppliers(name);
+
+-- User Login Index
+CREATE INDEX idx_users_email ON users(email);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { cachedGet } from '../services/api';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
@@ -31,8 +31,8 @@ const Suppliers = () => {
 
     const fetchSuppliers = async () => {
         try {
-            const res = await api.get('/suppliers');
-            setSuppliers(res.data);
+            const data = await cachedGet<Supplier[]>('/suppliers');
+            setSuppliers(data);
         } catch (err: any) {
             toast.error('Failed to load suppliers. Please refresh the page.');
             console.error(err);

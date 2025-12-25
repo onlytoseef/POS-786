@@ -58,7 +58,7 @@ router.get("/:id", authorization, async (req, res) => {
       SELECT ii.*, p.name as product_name 
       FROM import_items ii 
       LEFT JOIN products p ON ii.product_id = p.id 
-      WHERE ii.invoice_id = $1
+      WHERE ii.import_invoice_id = $1
     `, [id]);
     
     res.json({ invoice: invoice.rows[0], items: items.rows });
@@ -82,14 +82,14 @@ router.post("/:id/items", authorization, async (req, res) => {
     }
     
     const newItem = await pool.query(
-      "INSERT INTO import_items (invoice_id, product_id, quantity, unit_price, total_price) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      "INSERT INTO import_items (import_invoice_id, product_id, quantity, unit_price, total_price) VALUES($1, $2, $3, $4, $5) RETURNING *",
       [id, product_id, quantity, unit_price, total_price]
     );
     
     // Update invoice total
     await pool.query(`
       UPDATE import_invoices SET total_amount = (
-        SELECT COALESCE(SUM(total_price), 0) FROM import_items WHERE invoice_id = $1
+        SELECT COALESCE(SUM(total_price), 0) FROM import_items WHERE import_invoice_id = $1
       ) WHERE id = $1
     `, [id]);
     
@@ -116,7 +116,7 @@ router.delete("/:id/items/:itemId", authorization, async (req, res) => {
     // Update invoice total
     await pool.query(`
       UPDATE import_invoices SET total_amount = (
-        SELECT COALESCE(SUM(total_price), 0) FROM import_items WHERE invoice_id = $1
+        SELECT COALESCE(SUM(total_price), 0) FROM import_items WHERE import_invoice_id = $1
       ) WHERE id = $1
     `, [id]);
     
@@ -143,7 +143,7 @@ router.post("/:id/finalize", authorization, async (req, res) => {
     }
     
     // Get all items
-    const items = await client.query("SELECT * FROM import_items WHERE invoice_id = $1", [id]);
+    const items = await client.query("SELECT * FROM import_items WHERE import_invoice_id = $1", [id]);
     
     // Update stock for each item
     for (const item of items.rows) {

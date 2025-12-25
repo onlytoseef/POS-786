@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { cachedGet } from '../services/api';
 import useCurrencyConverter from '../hooks/useCurrencyConverter';
 import { FaChartLine, FaFileImport, FaBoxes, FaHandHoldingUsd, FaMoneyCheckAlt, FaWallet, FaFilePdf } from 'react-icons/fa';
 import toast from 'react-hot-toast';
@@ -24,8 +24,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await api.get('/dashboard/stats');
-                setStats(res.data);
+                const data = await cachedGet<DashboardStats>('/dashboard/stats');
+                setStats(data);
             } catch (err: any) {
                 if (err.code === 'ERR_NETWORK') {
                     toast.error('Cannot connect to server. Please ensure the server is running.');

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import api from '../services/api';
+import api, { cachedGet } from '../services/api';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import DataTable from '../components/ui/DataTable';
@@ -99,8 +99,8 @@ const Sales = () => {
 
     const fetchCustomers = async () => {
         try {
-            const res = await api.get('/customers');
-            setCustomers(res.data);
+            const data = await cachedGet<Customer[]>('/customers');
+            setCustomers(data);
         } catch (err: any) {
             toast.error('Failed to load customers');
             console.error(err);
@@ -109,8 +109,8 @@ const Sales = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await api.get('/products');
-            setProducts(res.data);
+            const data = await cachedGet<Product[]>('/products');
+            setProducts(data);
         } catch (err: any) {
             toast.error('Failed to load products');
             console.error(err);

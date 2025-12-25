@@ -31,7 +31,7 @@ router.get("/stats", authorization, async (req, res) => {
       SELECT COALESCE(SUM(
         p.current_stock * COALESCE(
           (SELECT AVG(ii.unit_price) FROM import_items ii 
-           JOIN import_invoices inv ON ii.invoice_id = inv.id 
+           JOIN import_invoices inv ON ii.import_invoice_id = inv.id 
            WHERE ii.product_id = p.id AND inv.status = 'finalized'),
           p.opening_cost
         )

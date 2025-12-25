@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { cachedGet } from '../services/api';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
@@ -48,8 +48,8 @@ const Products = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await api.get('/products');
-            setProducts(res.data);
+            const data = await cachedGet<Product[]>('/products');
+            setProducts(data);
         } catch (err: any) {
             toast.error('Failed to load products. Please refresh the page.');
             console.error(err);
@@ -60,8 +60,8 @@ const Products = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await api.get('/categories');
-            setCategories(res.data);
+            const data = await cachedGet<Category[]>('/categories');
+            setCategories(data);
         } catch (err: any) {
             console.error(err);
         }
